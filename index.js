@@ -22,7 +22,32 @@ async function run() {
   try {
     await client.connect();
     const database = client.db("classicWatch");
-    const productsCollection = database.collection("products");
+    const productCollection = database.collection("products");
+
+    //GET Products API
+    app.get("/products", async (req, res) => {
+      const cursor = productCollection.find({});
+      const size = parseInt(req.query.size);
+
+      let products;
+      if (size) {
+        products = await cursor.limit(size).toArray();
+      } else {
+        products = await cursor.toArray();
+      }
+      res.send({
+        products,
+      });
+    });
+
+    //GET Single Product API
+    app.get("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const service = await productCollection.findOne(query);
+      res.json(service);
+    });
+
     console.log("Database Connected Successfully");
   } finally {
     // await client.close();
@@ -31,7 +56,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Classic Watch Server Connected");
 });
 
 app.listen(port, () => {
