@@ -68,10 +68,28 @@ async function run() {
       res.json(result);
     });
 
+    // Post order information to database
     app.post("/orders", async (req, res) => {
       const orders = req.body;
       const result = await orderCollection.insertOne(orders);
       res.json(result);
+    });
+
+    // Get all orders API
+    app.get("/orders", async (req, res) => {
+      const cursor = orderCollection.find({});
+      const booking = await cursor.toArray();
+      res.send(booking);
+    });
+
+    // Get specific user order API
+    app.get("/myOrders/:email", async (req, res) => {
+      const result = await orderCollection
+        .find({
+          email: req.params.email,
+        })
+        .toArray();
+      res.send(result);
     });
   } finally {
     // await client.close();
