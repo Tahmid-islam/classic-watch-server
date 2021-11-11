@@ -23,6 +23,7 @@ async function run() {
     await client.connect();
     const database = client.db("classicWatch");
     const productCollection = database.collection("products");
+    const orderCollection = database.collection("orders");
     const userCollection = database.collection("users");
 
     // Get Products API
@@ -64,6 +65,12 @@ async function run() {
         $set: user,
       };
       const result = await userCollection.updateOne(filter, updateDoc, options);
+      res.json(result);
+    });
+
+    app.post("/orders", async (req, res) => {
+      const orders = req.body;
+      const result = await orderCollection.insertOne(orders);
       res.json(result);
     });
   } finally {
