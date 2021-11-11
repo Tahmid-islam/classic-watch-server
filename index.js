@@ -25,6 +25,7 @@ async function run() {
     const productCollection = database.collection("products");
     const orderCollection = database.collection("orders");
     const userCollection = database.collection("users");
+    const reviewCollection = database.collection("reviews");
 
     // Get Products API
     app.get("/products", async (req, res) => {
@@ -82,6 +83,14 @@ async function run() {
       res.send(booking);
     });
 
+    // Delete  Orders API
+    app.delete("/orders/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await orderCollection.deleteOne(query);
+      res.json(result);
+    });
+
     // Get specific user order API
     app.get("/myOrders/:email", async (req, res) => {
       const result = await orderCollection
@@ -90,6 +99,33 @@ async function run() {
         })
         .toArray();
       res.send(result);
+    });
+
+    // status update
+    app.put("/updateStatus/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await orderCollection.updateOne(filter, {
+        $set: {
+          status: "Shipped",
+        },
+      });
+      res.send(result);
+      console.log(result);
+    });
+
+    // Post Review API
+    app.post("/reviews", async (req, res) => {
+      const review = req.body;
+      const result = await reviewCollection.insertOne(review);
+      res.json(result);
+    });
+
+    // Get all reviews API
+    app.get("/reviews", async (req, res) => {
+      const cursor = reviewCollection.find({});
+      const reviews = await cursor.toArray();
+      res.send(reviews);
     });
   } finally {
     // await client.close();
