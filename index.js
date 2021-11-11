@@ -23,12 +23,12 @@ async function run() {
     await client.connect();
     const database = client.db("classicWatch");
     const productCollection = database.collection("products");
+    const userCollection = database.collection("users");
 
-    //GET Products API
+    // Get Products API
     app.get("/products", async (req, res) => {
       const cursor = productCollection.find({});
       const size = parseInt(req.query.size);
-
       let products;
       if (size) {
         products = await cursor.limit(size).toArray();
@@ -40,7 +40,7 @@ async function run() {
       });
     });
 
-    //GET Single Product API
+    // Get Single Product API
     app.get("/products/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -48,7 +48,24 @@ async function run() {
       res.json(service);
     });
 
-    console.log("Database Connected Successfully");
+    // Post user information tp database after register new user
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
+      res.json(result);
+    });
+
+    // Update user information in database if user exists or not in google log in
+    app.put("/users", async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: user,
+      };
+      const result = await userCollection.updateOne(filter, updateDoc, options);
+      res.json(result);
+    });
   } finally {
     // await client.close();
   }
