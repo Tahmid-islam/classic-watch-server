@@ -142,6 +142,26 @@ async function run() {
       const reviews = await cursor.toArray();
       res.send(reviews);
     });
+
+    // Make admin role API
+    app.put("/admin", async (req, res) => {
+      const filter = { email: req.body.email };
+      const result = await userCollection.find(filter).toArray();
+      if (result) {
+        const documents = await userCollection.updateOne(filter, {
+          $set: { role: "admin" },
+        });
+        res.json(documents);
+      }
+    });
+
+    // check admin or not
+    app.get("/admin/:email", async (req, res) => {
+      const result = await userCollection
+        .find({ email: req.params.email })
+        .toArray();
+      res.send(result);
+    });
   } finally {
     // await client.close();
   }
