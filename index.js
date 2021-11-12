@@ -27,6 +27,13 @@ async function run() {
     const userCollection = database.collection("users");
     const reviewCollection = database.collection("reviews");
 
+    // Post Product API
+    app.post("/products", async (req, res) => {
+      const product = req.body;
+      const result = await productCollection.insertOne(product);
+      res.json(result);
+    });
+
     // Get Products API
     app.get("/products", async (req, res) => {
       const cursor = productCollection.find({});
@@ -48,6 +55,14 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const service = await productCollection.findOne(query);
       res.json(service);
+    });
+
+    // Delete Single Product API
+    app.delete("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
+      res.json(result);
     });
 
     // Post user information tp database after register new user
@@ -101,7 +116,7 @@ async function run() {
       res.send(result);
     });
 
-    // status update
+    // Status update
     app.put("/updateStatus/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: ObjectId(id) };
