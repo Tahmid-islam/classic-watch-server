@@ -126,7 +126,6 @@ async function run() {
         },
       });
       res.send(result);
-      console.log(result);
     });
 
     // Post Review API
