@@ -1,16 +1,17 @@
-### Live Site Link: https://classic-watch.web.app/
+
+### Live Site Link: https://classic-watch.web.app/ 
 
 ### Features:
 - Name of this web app is Classic Watch.
-- It is watch buying website only for wrist watch.
-- User can buy watch from our website as their preferred type.
+- It is a watch buying website only for wristwatches.
+- Users can buy watches from our website as their preferred type.
 - Complete dashboard added.
-- User can see their order list form dashboard and delete their order from their.
-- User can review our website from here it will be showed in home page.
-- Admin can add new admin form dashboard.
-- Admin panel can add the new watch variation form this web app.
-- Admin can update the booking status of a user form this web app.
-- Comnplete login and authentication system added.
+- User can see their order list from the dashboard and delete their order from there.
+- Users can review our website from here it will be shown on the home page.
+- Admin can add a new admin form dashboard.
+- Admin panel can add the new watch variation from this web app.
+- Admin can update the booking status of a user from this web app.
+- Complete login and authentication system added.
 
 ### Technology Used:
 - React.js
@@ -24,4 +25,3 @@
 - React Hook Form
 - Heroku
 - Firebase
-
